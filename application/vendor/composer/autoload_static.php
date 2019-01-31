@@ -4,12 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb44aa0781c59d659eca7a2ddb8801472
+class ComposerStaticInitbf854d35ad4b9fbb0ba32b95d7b05e08
 {
     public static $prefixLengthsPsr4 = array (
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
+            'PhpParser\\' => 10,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
         ),
         'D' => 
@@ -22,6 +23,10 @@ class ComposerStaticInitb44aa0781c59d659eca7a2ddb8801472
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'PhpParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (
@@ -36,8 +41,8 @@ class ComposerStaticInitb44aa0781c59d659eca7a2ddb8801472
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb44aa0781c59d659eca7a2ddb8801472::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb44aa0781c59d659eca7a2ddb8801472::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbf854d35ad4b9fbb0ba32b95d7b05e08::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbf854d35ad4b9fbb0ba32b95d7b05e08::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }
