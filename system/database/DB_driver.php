@@ -2,26 +2,37 @@
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.2.4 or newer
+ * An open source application development framework for PHP
  *
- * NOTICE OF LICENSE
+ * This content is released under the MIT License (MIT)
  *
- * Licensed under the Open Software License version 3.0
+ * Copyright (c) 2014 - 2015, British Columbia Institute of Technology
  *
- * This source file is subject to the Open Software License (OSL 3.0) that is
- * bundled with this package in the files license.txt / license.rst.  It is
- * also available through the world wide web at this URL:
- * http://opensource.org/licenses/OSL-3.0
- * If you did not receive a copy of the license and are unable to obtain it
- * through the world wide web, please send an email to
- * licensing@ellislab.com so we can send you a copy immediately.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * @package		CodeIgniter
- * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc. (http://ellislab.com/)
- * @license		http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
- * @link		http://codeigniter.com
- * @since		Version 1.0
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @package	CodeIgniter
+ * @author	EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (http://ellislab.com/)
+ * @copyright	Copyright (c) 2014 - 2015, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license	http://opensource.org/licenses/MIT	MIT License
+ * @link	http://codeigniter.com
+ * @since	Version 1.0.0
  * @filesource
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -111,15 +122,6 @@ abstract class CI_DB_driver {
 	 * @var	string
 	 */
 	public $dbcollat		= 'utf8_general_ci';
-
-	/**
-	 * Auto-init flag
-	 *
-	 * Whether to automatically initialize the DB connection.
-	 *
-	 * @var	bool
-	 */
-	public $autoinit		= TRUE;
 
 	/**
 	 * Encryption flag/data
@@ -261,6 +263,15 @@ abstract class CI_DB_driver {
 	protected $_trans_status	= TRUE;
 
 	/**
+	 * Transaction failure flag
+	 *
+	 * Used with transactions to determine if a transaction has failed.
+	 *
+	 * @var	bool
+	 */
+	protected $_trans_failure	= FALSE;
+
+	/**
 	 * Cache On flag
 	 *
 	 * @var	bool
@@ -361,7 +372,7 @@ abstract class CI_DB_driver {
 			}
 		}
 
-		log_message('debug', 'Database Driver Class Initialized');
+		log_message('info', 'Database Driver Class Initialized');
 	}
 
 	// --------------------------------------------------------------------
@@ -387,7 +398,7 @@ abstract class CI_DB_driver {
 		// ----------------------------------------------------------------
 
 		// Connect to the database and set the connection ID
-		$this->conn_id = ($this->pconnect === FALSE) ? $this->db_connect() : $this->db_pconnect();
+		$this->conn_id = $this->db_connect($this->pconnect);
 
 		// No connection resource? Check if there is a failover else throw an error
 		if ( ! $this->conn_id)
@@ -405,7 +416,7 @@ abstract class CI_DB_driver {
 					}
 
 					// Try to connect
-					$this->conn_id = ($this->pconnect === FALSE) ? $this->db_connect() : $this->db_pconnect();
+					$this->conn_id = $this->db_connect($this->pconnect);
 
 					// If a connection is made break the foreach loop
 					if ($this->conn_id)
@@ -424,12 +435,39 @@ abstract class CI_DB_driver {
 				{
 					$this->display_error('db_unable_to_connect');
 				}
+
 				return FALSE;
 			}
 		}
 
 		// Now we set the character set and that's all
 		return $this->db_set_charset($this->char_set);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * DB connect
+	 *
+	 * This is just a dummy method that all drivers will override.
+	 *
+	 * @return	mixed
+	 */
+	public function db_connect()
+	{
+		return TRUE;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Persistent database connection
+	 *
+	 * @return	mixed
+	 */
+	public function db_pconnect()
+	{
+		return $this->db_connect(TRUE);
 	}
 
 	// --------------------------------------------------------------------
@@ -443,7 +481,7 @@ abstract class CI_DB_driver {
 	 * This is just a dummy method to allow drivers without such
 	 * functionality to not declare it, while others will override it.
 	 *
-	 * @return      void
+	 * @return	void
 	 */
 	public function reconnect()
 	{
@@ -457,7 +495,7 @@ abstract class CI_DB_driver {
 	 * This is just a dummy method to allow drivers without such
 	 * functionality to not declare it, while others will override it.
 	 *
-	 * @return      bool
+	 * @return	bool
 	 */
 	public function db_select()
 	{
@@ -523,8 +561,7 @@ abstract class CI_DB_driver {
 			return ($this->db_debug) ? $this->display_error('db_unsupported_function') : FALSE;
 		}
 
-		$query = $this->query($sql);
-		$query = $query->row();
+		$query = $this->query($sql)->row();
 		return $this->data_cache['version'] = $query->ver;
 	}
 
@@ -610,7 +647,10 @@ abstract class CI_DB_driver {
 			}
 
 			// This will trigger a rollback if transactions are being used
-			$this->_trans_status = FALSE;
+			if ($this->_trans_depth !== 0)
+			{
+				$this->_trans_status = FALSE;
+			}
 
 			// Grab the error now, as we might run some additional queries before displaying the error
 			$error = $this->error();
@@ -664,12 +704,6 @@ abstract class CI_DB_driver {
 			return TRUE;
 		}
 
-		// Return TRUE if we don't need to create a result object
-		if ($return_object !== TRUE)
-		{
-			return TRUE;
-		}
-
 		// Load and instantiate the result driver
 		$driver		= $this->load_rdriver();
 		$RES		= new $driver($this);
@@ -712,8 +746,8 @@ abstract class CI_DB_driver {
 
 		if ( ! class_exists($driver, FALSE))
 		{
-			include_once(BASEPATH.'database/DB_result.php');
-			include_once(BASEPATH.'database/drivers/'.$this->dbdriver.'/'.$this->dbdriver.'_result.php');
+			require_once(BASEPATH.'database/DB_result.php');
+			require_once(BASEPATH.'database/drivers/'.$this->dbdriver.'/'.$this->dbdriver.'_result.php');
 		}
 
 		return $driver;
@@ -782,7 +816,7 @@ abstract class CI_DB_driver {
 	{
 		if ( ! $this->trans_enabled)
 		{
-			return FALSE;
+			return;
 		}
 
 		// When transactions are nested we only begin/commit/rollback the outermost ones
@@ -907,7 +941,12 @@ abstract class CI_DB_driver {
 		do
 		{
 			$c--;
-			$sql = substr_replace($sql, $this->escape($binds[$c]), $matches[0][$c][1], $ml);
+			$escaped_value = $this->escape($binds[$c]);
+			if (is_array($escaped_value))
+			{
+				$escaped_value = '('.implode(',', $escaped_value).')';
+			}
+			$sql = substr_replace($sql, $escaped_value, $matches[0][$c][1], $ml);
 		}
 		while ($c !== 0);
 
@@ -933,7 +972,7 @@ abstract class CI_DB_driver {
 	 * Calculate the aggregate query elapsed time
 	 *
 	 * @param	int	The number of decimal places
-	 * @return	int
+	 * @return	string
 	 */
 	public function elapsed_time($decimals = 6)
 	{
@@ -977,7 +1016,12 @@ abstract class CI_DB_driver {
 	 */
 	public function escape($str)
 	{
-		if (is_string($str) OR (is_object($str) && method_exists($str, '__toString')))
+		if (is_array($str))
+		{
+			$str = array_map(array(&$this, 'escape'), $str);
+			return $str;
+		}
+		elseif (is_string($str) OR (is_object($str) && method_exists($str, '__toString')))
 		{
 			return "'".$this->escape_str($str)."'";
 		}
@@ -998,7 +1042,7 @@ abstract class CI_DB_driver {
 	/**
 	 * Escape String
 	 *
-	 * @param	string	$str
+	 * @param	string|string[]	$str	Input string
 	 * @param	bool	$like	Whether or not the string will be used in a LIKE condition
 	 * @return	string
 	 */
@@ -1019,9 +1063,11 @@ abstract class CI_DB_driver {
 		// escape LIKE condition wildcards
 		if ($like === TRUE)
 		{
-			return str_replace(array($this->_like_escape_chr, '%', '_'),
-						array($this->_like_escape_chr.$this->_like_escape_chr, $this->_like_escape_chr.'%', $this->_like_escape_chr.'_'),
-						$str);
+			return str_replace(
+				array($this->_like_escape_chr, '%', '_'),
+				array($this->_like_escape_chr.$this->_like_escape_chr, $this->_like_escape_chr.'%', $this->_like_escape_chr.'_'),
+				$str
+			);
 		}
 
 		return $str;
@@ -1064,10 +1110,10 @@ abstract class CI_DB_driver {
 	 * Retrieves the primary key. It assumes that the row in the first
 	 * position is the primary key
 	 *
-	 * @param	string	the table name
+	 * @param	string	$table	Table name
 	 * @return	string
 	 */
-	public function primary($table = '')
+	public function primary($table)
 	{
 		$fields = $this->list_fields($table);
 		return is_array($fields) ? current($fields) : FALSE;
@@ -1175,20 +1221,15 @@ abstract class CI_DB_driver {
 	/**
 	 * Fetch Field Names
 	 *
-	 * @param	string	the table name
+	 * @param	string	$table	Table name
 	 * @return	array
 	 */
-	public function list_fields($table = '')
+	public function list_fields($table)
 	{
 		// Is there a cached result?
 		if (isset($this->data_cache['field_names'][$table]))
 		{
 			return $this->data_cache['field_names'][$table];
-		}
-
-		if ($table === '')
-		{
-			return ($this->db_debug) ? $this->display_error('db_field_param_missing') : FALSE;
 		}
 
 		if (FALSE === ($sql = $this->_list_columns($table)))
@@ -1244,18 +1285,13 @@ abstract class CI_DB_driver {
 	/**
 	 * Returns an object with field data
 	 *
-	 * @param	string	the table name
-	 * @return	object
+	 * @param	string	$table	the table name
+	 * @return	array
 	 */
-	public function field_data($table = '')
+	public function field_data($table)
 	{
-		if ($table === '')
-		{
-			return ($this->db_debug) ? $this->display_error('db_field_param_missing') : FALSE;
-		}
-
 		$query = $this->query($this->_field_data($this->protect_identifiers($table, TRUE, NULL, FALSE)));
-		return $query->field_data();
+		return ($query) ? $query->field_data() : FALSE;
 	}
 
 	// --------------------------------------------------------------------
@@ -1296,9 +1332,11 @@ abstract class CI_DB_driver {
 			if (is_array($this->_escape_char))
 			{
 				$preg_ec = array(
-						preg_quote($this->_escape_char[0], '/'), preg_quote($this->_escape_char[1], '/'),
-						$this->_escape_char[0], $this->_escape_char[1]
-						);
+					preg_quote($this->_escape_char[0], '/'),
+					preg_quote($this->_escape_char[1], '/'),
+					$this->_escape_char[0],
+					$this->_escape_char[1]
+				);
 			}
 			else
 			{
@@ -1537,7 +1575,7 @@ abstract class CI_DB_driver {
 	 */
 	public function cache_delete($segment_one = '', $segment_two = '')
 	{
-		return ($this->_cache_init())
+		return $this->_cache_init()
 			? $this->CACHE->delete($segment_one, $segment_two)
 			: FALSE;
 	}
@@ -1551,7 +1589,7 @@ abstract class CI_DB_driver {
 	 */
 	public function cache_delete_all()
 	{
-		return ($this->_cache_init())
+		return $this->_cache_init()
 			? $this->CACHE->delete_all()
 			: FALSE;
 	}
@@ -1565,16 +1603,13 @@ abstract class CI_DB_driver {
 	 */
 	protected function _cache_init()
 	{
-		if (class_exists('CI_DB_Cache', FALSE))
+		if ( ! class_exists('CI_DB_Cache', FALSE))
 		{
-			if (is_object($this->CACHE))
-			{
-				return TRUE;
-			}
+			require_once(BASEPATH.'database/DB_cache.php');
 		}
-		elseif ( ! @include_once(BASEPATH.'database/DB_cache.php'))
+		elseif (is_object($this->CACHE))
 		{
-			return $this->cache_off();
+			return TRUE;
 		}
 
 		$this->CACHE = new CI_DB_Cache($this); // pass db object to support multiple db connections and returned db objects
@@ -1602,7 +1637,7 @@ abstract class CI_DB_driver {
 	/**
 	 * Close DB Connection
 	 *
-	 * This method would be overriden by most of the drivers.
+	 * This method would be overridden by most of the drivers.
 	 *
 	 * @return	void
 	 */
@@ -1663,7 +1698,7 @@ abstract class CI_DB_driver {
 
 		$error =& load_class('Exceptions', 'core');
 		echo $error->show_error($heading, $message, 'error_db');
-		exit(EXIT_DATABASE);
+		exit(8); // EXIT_DATABASE
 	}
 
 	// --------------------------------------------------------------------
@@ -1719,7 +1754,7 @@ abstract class CI_DB_driver {
 		//
 		// Added exception for single quotes as well, we don't want to alter
 		// literal strings. -- Narf
-		if (strpos($item, '(') !== FALSE OR strpos($item, "'") !== FALSE)
+		if (strcspn($item, "()'") !== strlen($item))
 		{
 			return $item;
 		}
@@ -1732,15 +1767,15 @@ abstract class CI_DB_driver {
 		if ($offset = strripos($item, ' AS '))
 		{
 			$alias = ($protect_identifiers)
-					? substr($item, $offset, 4).$this->escape_identifiers(substr($item, $offset + 4))
-					: substr($item, $offset);
+				? substr($item, $offset, 4).$this->escape_identifiers(substr($item, $offset + 4))
+				: substr($item, $offset);
 			$item = substr($item, 0, $offset);
 		}
 		elseif ($offset = strrpos($item, ' '))
 		{
 			$alias = ($protect_identifiers)
-					? ' '.$this->escape_identifiers(substr($item, $offset + 1))
-					: substr($item, $offset);
+				? ' '.$this->escape_identifiers(substr($item, $offset + 1))
+				: substr($item, $offset);
 			$item = substr($item, 0, $offset);
 		}
 		else
@@ -1865,6 +1900,3 @@ abstract class CI_DB_driver {
 	}
 
 }
-
-/* End of file DB_driver.php */
-/* Location: ./system/database/DB_driver.php */
