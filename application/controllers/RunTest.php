@@ -1,18 +1,19 @@
 <?php
 include('BaseTest.php');
 defined('BASEPATH') OR exit('No direct script access allowed');
+use SebastianBergmann\CodeCoverage\CodeCoverage;
 // php index.php RunTest
 class RunTest extends CI_Controller {
 
 	public $classes = [
 		'notificationtest_model',
-		'usertest_model',
+		//'usertest_model',
 		'settingtest_model',
 		'Scoreboardtest_model',
 		'logtest_model',
 		'Submittest_model',
-		'Queuetest_model',
-		'Hoftest_model'
+		'Queuetest_model'//,
+		//'Hoftest_model'
 	];
 	private $test, $expected_result, $test_name;
 
@@ -32,14 +33,10 @@ class RunTest extends CI_Controller {
 	}
 
 	public function showResult() {
-        if (self::ENABLE_COVERAGE) {
-            $this->coverage->stop();
-            $writer = new \SebastianBergmann\CodeCoverage\Report\Html\Facade;
-            $writer->process($this->coverage, '../reports/code-coverage');
-        }
-
         // Generate Test Report HTML
+        $coverage = new CodeCoverage;
         file_put_contents('../reports/test_report.html', $this->unit->report());
+
 		$results = $this->unit->result();
 		$statistics = [
 				'Pass' => 0,
