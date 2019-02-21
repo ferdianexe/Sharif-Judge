@@ -19,5 +19,6 @@
         "vendor-dir": "application/vendor"
     },
     "require-dev": {
+        "phpunit/php-code-coverage": "^7.0"
     }
 }
