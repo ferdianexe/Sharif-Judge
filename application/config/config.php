@@ -272,7 +272,7 @@ $config['cache_path'] = '';
 | http://codeigniter.com/user_guide/libraries/sessions.html
 |
 */
-$config['encryption_key'] = 'zsFyvmc91N7YEl65VkRBIHebLC2AShJi';
+$config['encryption_key'] = 'DZ7hq4Y1HwXcM9mIP6pSJnutgrQd0TFx';
 
 /*
 |--------------------------------------------------------------------------
