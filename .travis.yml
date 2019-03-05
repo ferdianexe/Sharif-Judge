@@ -1,0 +1,7 @@
+language: php
+php:
+  - '7.2.15'
+before_script:
+cp application/config/database.example.php application/config/database.php
+cp application/config/secrets.example.php application/config/secrets.php
+script: php index.php RunTest
