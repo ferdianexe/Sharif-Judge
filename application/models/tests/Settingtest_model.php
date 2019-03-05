@@ -18,14 +18,12 @@ class Settingtest_model extends Test_model
     // ------------------------------------------------------------------------
     
     public function test(){
-        // $this->printSetting();
         $prevSetting = $this->settings_model->get_all_settings();
 
         $this->individualSettingTest();
         $this->setAllSettingTest();
 
         $this->settings_model->set_settings($prevSetting);
-        // $this->unit->run($test,$expected_result,$test_name);
     }
 
     public function individualSettingTest() {
@@ -76,34 +74,6 @@ class Settingtest_model extends Test_model
 
         $this->unit->run($test,$expected_result,$test_name,$notes);
     }
-
-    // public function printSetting(){
-    //     $testAll = $this->get_all_settings();
-    //     echo "Current Setting";
-    //     // print_r($testAll);
-    //     echo "\n";
-    // }
-    
-    // public function set_setting($key, $value)
-    // {
-    //     $this->db->where('shj_key', $key)->update('settings', array('shj_value'=>$value));
-    // }
-
-    // public function get_setting($key)
-    // {
-    //     return $this->db->select('shj_value')->get_where('settings', array('shj_key'=>$key))->row()->shj_value;
-    // }
-
-    // public function get_all_settings()
-    // {
-    //     $result = $this->db->get('settings')->result_array();
-    //     $settings = array();
-    //     foreach($result as $item)
-    //     {
-    //         $settings[$item['shj_key']] = $item['shj_value'];
-    //     }
-    //     return $settings;
-    // }
 
 	// ------------------------------------------------------------------------
 }
