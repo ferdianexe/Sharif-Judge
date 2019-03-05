@@ -33,15 +33,19 @@ class Logtest_model extends Test_model
         $test = $this->Logs_model->get_all_logs();
 		$expected_result = NULL;
         $test_name = "Initial test | Database should be empty.";
-		$this->unit->run($test, $expected_result, $test_name);
+        $notes = "Test result: $test\n" + 
+                "Expected result: $expected_result\n" +
+                "Last test date: " . date('H:i:s ~ Y-m-d');
+		$this->unit->run($test, $expected_result, $test_name, $notes);
     }
     
     private function initPastLogin() {
-        $data = array(
-            'username' => 'testuser',
-            'ip_address' => '127.0.0.1'
-        );
-        $this->db->insert('logins', $data);
+        // $data = array(
+        //     'username' => 'testuser',
+        //     'ip_address' => '127.0.0.1'
+        // );
+        // $this->db->insert('logins', $data);
+        $this->Logs_model->insert_to_logs('testuser', '127.0.0.1');
     }
 
     private function loginUser() {
