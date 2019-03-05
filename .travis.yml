@@ -4,8 +4,7 @@ php:
 before_script:
   - cp application/config/database.example.php application/config/database.php
   - cp application/config/secrets.example.php application/config/secrets.php
-  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('sharifjudge') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
-  - mysql -e 'CREATE DATABASE sharifjudge;' 
+  - sudo mysql -e "CREATE DATABASE sharifjudge;"
   - composer install
 services:
   - mysql
