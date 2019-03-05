@@ -84,7 +84,7 @@ $db['default'] = array(
 	'hostname' => 'localhost',  // database host
 	'username' => '',           // database username
 	'password' => '',           // database password
-	'database' => '',           // database name
+	'database' => 'sharifjudge',           // database name
 	'dbprefix' => 'shj_',       // table prefix
 	/**********************************************/
 	'pconnect' => TRUE,
