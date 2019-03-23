@@ -28,4 +28,11 @@ class Queuetest_model extends Test_model
         $this->unit->run($test,$expected_result,$test_name);
     }
 
+    public function testInQueue(){
+        $test_name = "test isi queue";
+        $test = $this->Queue_model->in_queue(test,1,1);
+        $expected_result = false;
+        $this->unit->run($test,$expected_result,$test_name);
+    }
+
 }
