@@ -44,17 +44,23 @@ class Usertest_model extends Test_model
     // // 32 - 33 
     $this->testing_method_delete_submissions();
     // 34 - 35
+    $this->testing_method_update_profile();
+
+    $this->testing_method_send_password_reset_mail();
+
+    $this->testing_method_update_login_time();
+
     $this->testing_method_delete_user();
     //
     $this->testing_method_passchange_is_valid();
     //
-    $this->testing_method_send_password_reset_mail();
+    
     //
     $this->testing_method_reset_password();
     //
-    $this->testing_method_update_profile();
+    
     //
-    $this->testing_method_update_login_time();
+   
     //
     $this->testing_method_selected_assignment();
 
@@ -160,10 +166,18 @@ class Usertest_model extends Test_model
     $temp2 = array();
     array_push($temp1, array('usertest1', 'usertest1@test.com', 'usertest1', '123456', 'student'));
     array_push($temp2, array('usertest2', 'usertest2@test.com', 'usertest2', '123456', 'nothing', 'Users role is not valid.'));
-    $test = $this->User_model->add_users("usertest1,usertest1@test.com,usertest1,123456,student \nusertest2,usertest2@test.com,usertest2,123456,nothing", false, 0);
+    $test = $this->User_model->add_users("usertest1,usertest1@test.com,usertest1,123456,student \nusertest2,usertest2@test.com,usertest2,123456,nothing", true, 0);
     $expected_result = array($temp1, $temp2);
     $test_name = "Testing add_users function in User_model.php";
     $notes = "input : 1 valid user and 1 not valid user \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
+
+    $temp1 = array();
+    $temp2 = array();
+    $test = $this->User_model->add_users('', false, 0);
+    $expected_result = array($temp1, $temp2);
+    $test_name = "Testing add_users function in User_model.php";
+    $notes = "input : empty \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
   }
 
@@ -188,6 +202,12 @@ class Usertest_model extends Test_model
     $expected_result = false;
     $test_name = "Testing have_user function in User_model.php";
     $notes = "input : ADMIN \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
+
+    $test = $this->User_model->have_user(false);
+    $expected_result = false;
+    $test_name = "Testing have_user function in User_model.php";
+    $notes = "input : null \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
 
@@ -282,8 +302,8 @@ class Usertest_model extends Test_model
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
     //27 - User_model method validate_user
-    $test = $this->User_model->validate_user('admin', 'nothing');
-    $expected_result = false;
+    $test = $this->User_model->validate_user('admin', 'admin123');
+    $expected_result = true;
     $test_name = "Testing validate_user function in User_model.php";
     $notes = "input : valid username and password \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
@@ -346,6 +366,7 @@ class Usertest_model extends Test_model
     $test_name = "Testing delete_submissions function in User_model.php";
     $ntes = "input : valid id \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
+
   }
 
   private function testing_method_delete_user()
@@ -373,6 +394,13 @@ class Usertest_model extends Test_model
     $test_name = "Testing update_profile function in User_model.php";
     $notes = "input : not valid userId \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
+
+    // - User_model method update_profile
+    $test = $this->User_model->update_profile(1);
+    $expected_result = null;
+    $test_name = "Testing update_profile function in User_model.php";
+    $notes = "input : valid userId \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
   }
 
   private function testing_method_passchange_is_valid()
@@ -382,6 +410,20 @@ class Usertest_model extends Test_model
     $expected_result = 'Invalid password reset link.';
     $test_name = "Testing passchange_is_valid function in User_model.php";
     $notes = "input : not valid passChangeKey \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
+
+    // - User_model method passchange_is_valid
+    $test = $this->User_model->passchange_is_valid(0);
+    $expected_result = true;
+    $test_name = "Testing passchange_is_valid function in User_model.php";
+    $notes = "input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
+
+    // - User_model method passchange_is_valid
+    $test = $this->User_model->passchange_is_valid(false);
+    $expected_result = 'The link is expired.';
+    $test_name = "Testing passchange_is_valid function in User_model.php";
+    $notes = "input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
   }
 
@@ -403,12 +445,26 @@ class Usertest_model extends Test_model
     // $expected_result = $temp;
     // $test_name = "Testing validate_user function in User_model.php || input : valid username \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     // $this->unit->run($test, $expected_result, $test_name, $notes);
+
+    $test = $this->User_model->selected_assignment('admin');
+    $expected_result = 0;
+    $test_name = "Testing selected_asssignment function in User_model.php";
+    $notes = "input : null \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
+
   }
 
   private function testing_method_send_password_reset_mail()
   {
     // - User_model method send_password_reset_mail
     $test = $this->User_model->send_password_reset_mail('asdfasdf');
+    $expected_result = null;
+    $test_name = "Testing send_password_reset_mail function in User_model.php";
+    $notes = "input : not valid email \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
+
+    // - User_model method send_password_reset_mail
+    $test = $this->User_model->send_password_reset_mail('usertest1@test.com');
     $expected_result = null;
     $test_name = "Testing send_password_reset_mail function in User_model.php";
     $notes = "input : not valid email \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
@@ -423,13 +479,24 @@ class Usertest_model extends Test_model
     $test_name = "Testing reset_password function in User_model.php";
     $notes = "input : not valid passChangeKey \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
+
+    // - User_model method passchange_is_valid
+    $test = $this->User_model->reset_password(0, 'newPass');
+    $expected_result = true;
+    $test_name = "Testing reset_password function in User_model.php";
+    $notes = "input : valid passChangeKey \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
   }
 
   
 
   private function testing_method_update_login_time()
   {
-
+    $test = $this->User_model->update_login_time('admin');
+    $expected_result = null;
+    $test_name = "Testing update_login_time function in User_model.php";
+    $notes = "input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
   }
   // ------------------------------------------------------------------------
 }
