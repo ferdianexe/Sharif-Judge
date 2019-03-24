@@ -39,10 +39,10 @@ class Assignmenttest_model extends Test_model
   private function testing_method_add_assignment()
   {
     // - User_model method passchange_is_valid
-    $test = $this->Assignment_model->add_assignment(1,TRUE);
-    $expected_result = true;
-    $test_name = "Testing add_assignment function in User_model.php || input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
-    $this->unit->run($test, $expected_result, $test_name);
+    // $test = $this->Assignment_model->add_assignment(1,TRUE);
+    // $expected_result = true;
+    // $test_name = "Testing add_assignment function in User_model.php || input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    // $this->unit->run($test, $expected_result, $test_name);
   }
 
   private function testing_method_all_assignments(){
