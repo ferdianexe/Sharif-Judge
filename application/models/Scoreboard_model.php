@@ -35,8 +35,10 @@ class Scoreboard_model extends CI_Model
 		$submit_penalty = $this->settings_model->get_setting('submit_penalty');
 		$scores = array();
 		foreach ($submissions as $submission){
+
 			$pi = $this->assignment_model->problem_info($assignment_id, $submission['problem']);
-			$pre_score = ceil($submission['pre_score']*$pi['score']/10000); 
+
+			$pre_score = ceil($submission['pre_score']*$pi['score']/10000);
 			if ($submission['coefficient'] === 'error')
 				$final_score = 0;
 			else
@@ -137,7 +139,6 @@ class Scoreboard_model extends CI_Model
 		// Generate the scoreboard's html code
 		// todo: Save Scoreboard as json (generate html at client side)
 		$all_problems = $this->assignment_model->all_problems($assignment_id);
-		echo "ID ".$assignment_id." Banyak Array : ".count($all_problems)."\n";
 		$total_score = 0;
 		foreach($all_problems as $i)
 			$total_score += $i['score'];
