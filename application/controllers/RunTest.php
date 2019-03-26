@@ -4,7 +4,7 @@ include('BaseTest.php');
 defined('BASEPATH') OR exit('No direct script access allowed');
 // php index.php RunTest
 class RunTest extends CI_Controller {
-	const ENABLE_COVERAGE = false; // Requires xdebug
+	const ENABLE_COVERAGE = true; // Requires xdebug
 	public $classes = [
 		'notificationtest_model',
 		'usertest_model',
