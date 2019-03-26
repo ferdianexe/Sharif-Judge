@@ -250,8 +250,6 @@ class Scoreboardtest_model extends Test_model {
           $this->unit->run($scoreboard,$expected_result2,$test_name2);
 
           $this->db->insert('shj_submissions',$this->shj_submissionsdummy[2]);
-          // $this->db->insert('shj_problems',$this->shj_problemsdummy[0]);
-          // $this->db->insert('shj_problems',$this->shj_problemsdummy[1]);
           $this->db->query("INSERT INTO `shj_problems` (`assignment`, `id`, `name`, `score`, `is_upload_only`, `c_time_limit`, `python_time_limit`, `java_time_limit`, `memory_limit`, `allowed_languages`, `diff_cmd`, `diff_arg`) VALUES ('3', '1', 'Problem 1', '0', '0', '500', '1500', '2000', '50000', 'java', 'diff', '-bB');");
           $this->db->query("INSERT INTO `shj_problems` (`assignment`, `id`, `name`, `score`, `is_upload_only`, `c_time_limit`, `python_time_limit`, `java_time_limit`, `memory_limit`, `allowed_languages`, `diff_cmd`, `diff_arg`) VALUES ('3', '2', 'Problem 2', '50', '0', '500', '1500', '2000', '50000', 'java', 'diff', '-bB');");
           $scoreboard=$this->Scoreboard_model->update_scoreboard(3);

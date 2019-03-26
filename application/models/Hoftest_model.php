@@ -3,35 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // php index.php ContohTest
 class Hoftest_model extends Test_model {
 
-    // var $shj_submissionsdummy = array(
-    //     array(
-    //         'submit_id' => '1',
-    //         'username'=>'naofal',
-    //         'assignment'=>'1',
-    //         'problem'=>'1',
-    //         'is_final'=>'1',
-    //         'time'=>'2018-02-14 09:04:03',
-    //         'status'=>'SCORE',
-    //         'pre_score'=>90,
-    //         'coefficient'=>'100',
-    //         'file_name'=>'Fibonacci-1',
-    //         'main_file_name'=>'Fibonacci',
-    //         'file_type'=>'java'),
-    //     array(
-    //         'submit_id' => '2',
-    //         'username'=>'naofal',
-    //         'assignment'=>'2',
-    //         'problem'=>'1',
-    //         'is_final'=>'1',
-    //         'time'=>'2018-02-14 09:04:03',
-    //         'status'=>'SCORE',
-    //         'pre_score'=>0,
-    //         'coefficient'=>'100',
-    //         'file_name'=>'Fibonacci-1',
-    //         'main_file_name'=>'Fibonacci',
-    //         'file_type'=>'java')
-    //     );
-
     public function __construct(){
         parent::__construct(); 
         $this->load->library("unit_test");
