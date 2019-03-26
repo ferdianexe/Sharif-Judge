@@ -199,6 +199,13 @@ class Queuetest_model extends Test_model
             'main_file_name' => 'Main',
             'file_type' => 'java',
         );
+        $dummyArrays = array(
+            'submit_id' => 1,
+            'username' => 'dummy bois',
+            'assignment' => 1,
+            'problem' => 1,
+            'type' => 'judge'
+        );
         $addQueue = $this->Queue_model->add_to_queue($dummyArray);
         $test = $this->Queue_model->in_queue('dummy bois', 1,1);
         $expected_result = true;
