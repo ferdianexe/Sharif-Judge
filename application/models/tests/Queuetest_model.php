@@ -8,13 +8,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Queuetest_model extends Test_model
 {
-    var $dummyArray = array(
-        'submit_id' => 1,
-        'username' => 'dummy bois',
-        'assignment' => 1,
-        'problem' => 1,
-        'type' => 'judge'
-    );
 
     var $shj_assignmentsdummy = array(
         array(
@@ -192,8 +185,20 @@ class Queuetest_model extends Test_model
 
     public function testAddQueue(){
         $test_name = "add to queue";
-        $dummyArray = $this->dummyArray;
-        $insert = $this->db->insert('shj_submissions',$this->shj_submissionsdummy[1]);
+        $dummyArray = array(
+            'submit_id' => 1,
+            'username' => "Aku Tester",
+            'assignment'=> 1,
+            'problem' => 1,
+            'is_final' => 1,
+            'status' => '',
+            'time' => "2019-02-13 00:00:00",
+            'pre_score' => 100,
+            'coefficient' => 25,
+            'file_name' => 'Main',
+            'main_file_name' => 'Main',
+            'file_type' => 'java',
+        );
         $addQueue = $this->Queue_model->add_to_queue($dummyArray);
         $test = $this->Queue_model->in_queue('dummy bois', 1,1);
         $expected_result = true;
@@ -211,8 +216,20 @@ class Queuetest_model extends Test_model
         $this->unit->run($test1,$expected_result1,$test_name1);
 
         $test_name = "test get 1st item";
-        $dummyArray = $this->dummyArray;
-        $insert = $this->db->insert('shj_submissions',$this->shj_submissionsdummy[1]);
+        $dummyArray = array(
+            'submit_id' => 1,
+            'username' => "Aku Tester",
+            'assignment'=> 1,
+            'problem' => 1,
+            'is_final' => 1,
+            'status' => '',
+            'time' => "2019-02-13 00:00:00",
+            'pre_score' => 100,
+            'coefficient' => 25,
+            'file_name' => 'Main',
+            'main_file_name' => 'Main',
+            'file_type' => 'java',
+        );
         $addQueue = $this->Queue_model->add_to_queue($dummyArray);
         $preTest = $this->Queue_model->get_first_item();
         $this->load->helper('array');
