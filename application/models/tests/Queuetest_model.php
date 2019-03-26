@@ -11,6 +11,7 @@ class Queuetest_model extends Test_model
     public function __construct()
     {
         parent::__construct();
+        $this->load->library("unit_test");
         $this->load->model("Queue_model");
     }
 
@@ -18,6 +19,7 @@ class Queuetest_model extends Test_model
     {
         // TODO: Implement test() method.
         $this->testNotEmptyQueue();
+        $this->testInQueue();
 
     }
 
@@ -29,10 +31,4 @@ class Queuetest_model extends Test_model
     }
 
     public function testInQueue(){
-        $test_name = "test isi queue";
-        $test = $this->Queue_model->in_queue(test,1,1);
-        $expected_result = false;
-        $this->unit->run($test,$expected_result,$test_name);
-    }
-
 }
