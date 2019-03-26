@@ -206,7 +206,7 @@ class Queuetest_model extends Test_model
             'problem' => 1,
             'type' => 'judge'
         );
-        $addQueue = $this->Queue_model->add_to_queue($dummyArray);
+        $addQueue = $this->Queue_model->add_to_queue($dummyArrays);
         $test = $this->Queue_model->in_queue('dummy bois', 1,1);
         $expected_result = true;
         $this->unit->run($test,$expected_result,$test_name);
