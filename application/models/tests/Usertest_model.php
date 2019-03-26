@@ -204,7 +204,7 @@ class Usertest_model extends Test_model
     $notes = "input : ADMIN \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
-    $test = $this->User_model->have_user(false);
+    $test = $this->User_model->have_user("false");
     $expected_result = false;
     $test_name = "Testing have_user function in User_model.php";
     $notes = "input : null \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
@@ -406,21 +406,21 @@ class Usertest_model extends Test_model
   private function testing_method_passchange_is_valid()
   {
     // - User_model method passchange_is_valid
-    $test = $this->User_model->passchange_is_valid(-1);
+    $test = $this->User_model->passchange_is_valid("-1");
     $expected_result = 'Invalid password reset link.';
     $test_name = "Testing passchange_is_valid function in User_model.php";
     $notes = "input : not valid passChangeKey \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
     // - User_model method passchange_is_valid
-    $test = $this->User_model->passchange_is_valid(0);
+    $test = $this->User_model->passchange_is_valid("0");
     $expected_result = true;
     $test_name = "Testing passchange_is_valid function in User_model.php";
     $notes = "input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
     // - User_model method passchange_is_valid
-    $test = $this->User_model->passchange_is_valid(false);
+    $test = $this->User_model->passchange_is_valid("false");
     $expected_result = 'The link is expired.';
     $test_name = "Testing passchange_is_valid function in User_model.php";
     $notes = "input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
@@ -474,14 +474,14 @@ class Usertest_model extends Test_model
   private function testing_method_reset_password()
   {
     // - User_model method passchange_is_valid
-    $test = $this->User_model->reset_password(-1, 'newPass');
+    $test = $this->User_model->reset_password("-1", 'newPass');
     $expected_result = false;
     $test_name = "Testing reset_password function in User_model.php";
     $notes = "input : not valid passChangeKey \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
     // - User_model method passchange_is_valid
-    $test = $this->User_model->reset_password(0, 'newPass');
+    $test = $this->User_model->reset_password("0", 'newPass');
     $expected_result = true;
     $test_name = "Testing reset_password function in User_model.php";
     $notes = "input : valid passChangeKey \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
