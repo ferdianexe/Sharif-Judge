@@ -4,18 +4,18 @@ include('BaseTest.php');
 defined('BASEPATH') OR exit('No direct script access allowed');
 // php index.php RunTest
 class RunTest extends CI_Controller {
-	const ENABLE_COVERAGE = true; // Requires xdebug
+	const ENABLE_COVERAGE = TRUE; // Requires xdebug
 	public $classes = [
 		//notificationtest model has to be run first in the list
 		'notificationtest_model',
-		'usertest_model',
+		// 'usertest_model',
 		'settingtest_model',
-		'Scoreboardtest_model',
-		'logtest_model',
+		// 'Scoreboardtest_model',
+		// 'logtest_model',
 		'Submittest_model',
-		'Queuetest_model',
-		'Hoftest_model',
-		'Assignmenttest_model'
+		// 'Queuetest_model',
+		// 'Hoftest_model',
+		// 'Assignmenttest_model'
 	];
 	private $test, $expected_result, $test_name;
 	private $coverage;
