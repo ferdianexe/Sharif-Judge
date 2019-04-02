@@ -101,7 +101,7 @@ class Hoftest_model extends Test_model {
         $this->db->query("INSERT INTO `shj_users` (`id`, `username`, `password`, `display_name`, `email`, `role`, `passchange_key`, `passchange_time`, `first_login_time`, `last_login_time`, `selected_assignment`, `dashboard_widget_positions`) VALUES ('1', 'naofal', '080898', 'Admin', 'naofal@mail.com', 'admin', '', NULL, NULL, NULL, '0', '');");
         $test = $this->Hof_model->get_all_user_assignments('naofal');
         $expected_result = array(array('assignment'=>'Test','problem'=>'Problem 1','score'=>'1','scoreboard'=>'1'));
-        $test_name = "Test get_all_user_assigments assigment kosong";
+        $test_name = "Test get_all_user_assigments assigment tidak kosong";
         $notes = "input : valid assigment,submission,problems, and user \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
         $this->unit->run($test, $expected_result, $test_name,$notes);
         $this->emptyDB('users');
