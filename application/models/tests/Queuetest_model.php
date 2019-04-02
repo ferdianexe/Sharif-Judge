@@ -39,14 +39,21 @@ class Queuetest_model extends Test_model
         $test_name = "Test isi dari queue";
         $test = count($this->Queue_model->get_queue());
         $expected_result = 0;
-        $this->unit->run($test,$expected_result,$test_name);
+        $notes = "Test: count queue <br>" .
+            "Expected result: $expected_result<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+        $this->unit->run($test,$expected_result,$test_name, $notes);
     }
 
     public function testInQueue(){
         $test_name = "test search queue";
         $test = $this->Queue_model->in_queue(test,1,1);
         $expected_result = false;
-        $this->unit->run($test,$expected_result,$test_name);
+        $res = "false";
+        $notes = "Test: In Queue <br>" .
+            "Expected result: $res<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+        $this->unit->run($test,$expected_result,$test_name, $notes);
     }
 
     public function testEmptyQueue(){
@@ -54,7 +61,11 @@ class Queuetest_model extends Test_model
         $test = $this->Queue_model->empty_queue();
         $query = $this->db->get_where('queue', array('id'=>1));
         $expected_result = ($query != 0);
-        $this->unit->run($test,$expected_result,$test_name);
+        $res = "Row must be 0";
+        $notes = "Test: Empty Queue <br>" .
+            "Expected result: $res<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+        $this->unit->run($test,$expected_result,$test_name, $notes);
     }
 
     public function testAddQueue(){
@@ -76,7 +87,10 @@ class Queuetest_model extends Test_model
         $addQueue = $this->Queue_model->add_to_queue($dummyArray);
         $test = $this->Queue_model->in_queue("Aku Tester", 1,1);
         $expected_result = true;
-        $this->unit->run($test,$expected_result,$test_name);
+        $notes = "Test: add queue <br>" .
+            "Expected result: $expected_result<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+        $this->unit->run($test,$expected_result,$test_name,$notes);
 
         $this->emptyDB('scoreboard');
         $this->emptyDB('assignments');
@@ -88,7 +102,11 @@ class Queuetest_model extends Test_model
         $test_name1 = "Test get 1st item if null";
         $test1 = $this->Queue_model->get_first_item();
         $expected_result1 = NULL;
-        $this->unit->run($test1,$expected_result1,$test_name1);
+        $res = "null";
+        $notes = "Test: get top when queue empty <br>" .
+            "Expected result: $res<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+        $this->unit->run($test1,$expected_result1,$test_name1, $notes);
 
         $test_name = "test get 1st item";
         $dummyArray = array(
@@ -110,7 +128,10 @@ class Queuetest_model extends Test_model
         $this->load->helper('array');
         $test = (int)element('id', $preTest);
         $expected_result = 1;
-        $this->unit->run($test,$expected_result,$test_name);
+        $notes = "Test: get top queue (search by ID)<br>" .
+            "Expected result: $expected_result<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+        $this->unit->run($test,$expected_result,$test_name, $notes);
 
         $this->emptyDB('scoreboard');
         $this->emptyDB('assignments');
@@ -137,9 +158,13 @@ class Queuetest_model extends Test_model
         );
         $addQueue = $this->Queue_model->add_to_queue($dummyArray);
         $run = $this->Queue_model->remove_item("Aku Tester", 1, 1, 1);
-        $test = count($this->Queue_model->get_queue());
-        $expected_result = 0;
-        $this->unit->run($test,$expected_result,$test_name);
+        $test = $this->Queue_model->in_queue("Aku Tester",1,1);
+        $expected_result = null;
+        $res = "null";
+        $notes = "Test: remove queue (the data we insert become null)<br>" .
+            "Expected result: $res<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+        $this->unit->run($test,$expected_result,$test_name,$notes);
 
         $this->emptyDB('scoreboard');
         $this->emptyDB('assignments');
@@ -316,7 +341,10 @@ class Queuetest_model extends Test_model
         $this->db->insert('assignment', $dummyAssignment);
         $test = $this->Queue_model->rejudge(1,1);
         $expected_result = 0;
-        $this->unit->run($test,$expected_result,$test_name);
+        $notes = "Test: rrejudge<br>" .
+            "Expected result: none<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+        $this->unit->run($test,$expected_result,$test_name, $notes);
         $this->emptyDB('problems');
 
         $dummyArray2 = array(
@@ -336,7 +364,11 @@ class Queuetest_model extends Test_model
         $this->db->insert('problems', $dummyArray2);
         $test1 = $this->Queue_model->rejudge(1,1);
         $expected_result1 = 0;
-        $this->unit->run($test1,$expected_result1,$test_name);
+        $notes = "Test: rrejudge<br>" .
+            "Expected result: none<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+
+        $this->unit->run($test1,$expected_result1,$test_name,$notes);
 
         $this->emptyDB('scoreboard');
         $this->emptyDB('assignments');
@@ -346,7 +378,6 @@ class Queuetest_model extends Test_model
     }
 
     public function testSaveJudge(){
-        $test_name = "Test Rejudge Single";
         $dummyArray1 = array(
             'assignment'=> 1,
             'id' => 1,
@@ -425,7 +456,10 @@ class Queuetest_model extends Test_model
         $test_name = "Test save to db";
         $test = $this->Queue_model->save_judge_result_in_db(1,"judge");
         $expected_result = 0;
-        $this->unit->run($test,$expected_result,$test_name);
+        $notes = "Test: save to dbe<br>" .
+            "Expected result: db should exist<br>" .
+            "Last test date: " . date('H:i:s ~ Y-m-d');
+        $this->unit->run($test,$expected_result,$test_name, $notes);
 
         $this->emptyDB('scoreboard');
         $this->emptyDB('assignments');
