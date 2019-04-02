@@ -221,21 +221,21 @@ class Scoreboardtest_model extends Test_model {
           $this->db->insert('shj_assignments',$this->shj_assignmentsdummy[2]);
           $this->Scoreboard_model->update_scoreboards();
           
-          //5.Scoreboard_model method update_scoreboards
+          //6.Scoreboard_model method update_scoreboards
           $tabble = $this->db->select('scoreboard')->get_where('scoreboard', array('assignment'=>1));
           $expected_result2 = 'Scoreboard not found';
           $scoreboard=$this->Scoreboard_model->get_scoreboard(1);
           $test_name2 = "Test Update All Scoreboard (Scoreboard tidak enabled)";
           $notes = "input : valid assigment \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
           $this->unit->run($scoreboard,$expected_result2,$test_name2,$notes);
-          //6.Scoreboard_model method update_scoreboards
+          //7.Scoreboard_model method update_scoreboards
           $tabble = $this->db->select('scoreboard')->get_where('scoreboard', array('assignment'=>2));
           $expected_result2 = $tabble->row()->scoreboard;
           $scoreboard=$this->Scoreboard_model->get_scoreboard(2);
           $test_name2 = "Test Update All Scoreboard(Scoreboard enabled)";
           $notes = "input : valid assigment \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
           $this->unit->run($scoreboard,$expected_result2,$test_name2,$notes);
-          //6.Scoreboard_model method update_scoreboards
+          //8.Scoreboard_model method update_scoreboards
           $this->db->insert('submissions',$this->shj_submissionsdummy[0]);
           $this->Scoreboard_model->update_scoreboard(1);
           $tabble = $this->db->select('scoreboard')->get_where('scoreboard', array('assignment'=>1));
@@ -244,7 +244,7 @@ class Scoreboardtest_model extends Test_model {
           $test_name2 = "Test Update All Scoreboard (Scoreboard tidak enabled & Ada submission)";
           $notes = "input : valid submission & valid submission \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
           $this->unit->run($scoreboard,$expected_result2,$test_name2,$notes);
-          //7.Scoreboard_model method update_scoreboards
+          //9.Scoreboard_model method update_scoreboards
           $this->db->insert('shj_submissions',$this->shj_submissionsdummy[1]);
           $this->Scoreboard_model->update_scoreboard(2);
           $tabble = $this->db->select('scoreboard')->get_where('scoreboard', array('assignment'=>2));
@@ -253,7 +253,7 @@ class Scoreboardtest_model extends Test_model {
           $test_name2 = "Test Update All Scoreboard(Scoreboard enabled & Ada Submission)";
           $notes = "input : valid submission & valid submission \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
           $this->unit->run($scoreboard,$expected_result2,$test_name2,$notes);
-          //8.Scoreboard_model method update_scoreboards
+          //10.Scoreboard_model method update_scoreboards
           $this->db->insert('shj_submissions',$this->shj_submissionsdummy[2]);
           $this->db->query("INSERT INTO `shj_problems` (`assignment`, `id`, `name`, `score`, `is_upload_only`, `c_time_limit`, `python_time_limit`, `java_time_limit`, `memory_limit`, `allowed_languages`, `diff_cmd`, `diff_arg`) VALUES ('3', '1', 'Problem 1', '0', '0', '500', '1500', '2000', '50000', 'java', 'diff', '-bB');");
           $this->db->query("INSERT INTO `shj_problems` (`assignment`, `id`, `name`, `score`, `is_upload_only`, `c_time_limit`, `python_time_limit`, `java_time_limit`, `memory_limit`, `allowed_languages`, `diff_cmd`, `diff_arg`) VALUES ('3', '2', 'Problem 2', '50', '0', '500', '1500', '2000', '50000', 'java', 'diff', '-bB');");
@@ -306,7 +306,7 @@ class Scoreboardtest_model extends Test_model {
           $test_name2 = "Test Update Scoreboard (Scoreboard tidak enabled & Ada submission)";
           $notes = "input : valid submission & valid submission \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
           $this->unit->run($scoreboard,$expected_result2,$test_name2,$notes);
-          //4. Scoreboard_model method update_scoreboard
+          //5. Scoreboard_model method update_scoreboard
           $this->db->insert('shj_submissions',$this->shj_submissionsdummy[1]);
           $this->Scoreboard_model->update_scoreboard(2);
           $tabble = $this->db->select('scoreboard')->get_where('scoreboard', array('assignment'=>2));
