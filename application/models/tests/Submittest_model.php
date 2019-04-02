@@ -149,6 +149,8 @@ class Submittest_model extends Test_model
         $this->checkAllSubmissionForCertainProblemFromAdmin();
         $this->checkAllSubmissionForCertainProblemFromAdminWithPageSettingZero();
         $this->checkAllSubmissionForCertainProblemFromAdminWithPageSettingOne();
+        $this->countAllFinalSubmissionForCertainUser();
+        $this->countAllFinalSubmissionForCertainUserCertainProblem();
     }
 
   // ------------------------------------------------------------------------
@@ -437,6 +439,37 @@ class Submittest_model extends Test_model
       $this->db->insert('submissions', $this->submissions[4]);
       $total = count($this->Submit_model->get_all_submissions(1, 1, "Aku Tester Versi 2",1,NULL,1));
       $expected_result = 3;
+      $this->unit->run($total,$expected_result,$test_name);
+      $this->clear();
+    }
+    
+    private function countAllFinalSubmissionForCertainUser(){
+      $test_name = "Count all Final Submission for Certain User";
+      $this->db->insert('users',$this->user[0]);
+      $this->db->insert('users',$this->user[1]);
+      $this->db->insert('assignments', $this->assignment);
+      $this->db->insert('submissions', $this->submissions[0]);
+      $this->db->insert('submissions', $this->submissions[1]);
+      $this->db->insert('submissions', $this->submissions[2]);
+      $this->db->insert('submissions', $this->submissions[3]);
+      $this->db->insert('submissions', $this->submissions[4]);
+      $total = $this->Submit_model->count_final_submissions(1, 0, "Aku Tester Versi 2","Aku Tester Versi 2",NULL);
+      $expected_result = 2;
+      $this->unit->run($total,$expected_result,$test_name);
+      $this->clear();
+    }
+    private function countAllFinalSubmissionForCertainUserCertainProblem(){
+      $test_name = "Count all Final Submission for Certain User Certain Problem";
+      $this->db->insert('users',$this->user[0]);
+      $this->db->insert('users',$this->user[1]);
+      $this->db->insert('assignments', $this->assignment);
+      $this->db->insert('submissions', $this->submissions[0]);
+      $this->db->insert('submissions', $this->submissions[1]);
+      $this->db->insert('submissions', $this->submissions[2]);
+      $this->db->insert('submissions', $this->submissions[3]);
+      $this->db->insert('submissions', $this->submissions[4]);
+      $total = $this->Submit_model->count_final_submissions(1, 0, "Aku Tester Versi 2","Aku Tester Versi 2",1);
+      $expected_result = 1;
       $this->unit->run($total,$expected_result,$test_name);
       $this->clear();
     }
