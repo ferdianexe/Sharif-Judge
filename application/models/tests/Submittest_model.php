@@ -442,6 +442,7 @@ class Submittest_model extends Test_model
       $this->unit->run($total,$expected_result,$test_name);
       $this->clear();
     }
+    
     private function countAllFinalSubmissionForCertainUser(){
       $test_name = "Count all Final Submission for Certain User";
       $this->db->insert('users',$this->user[0]);
