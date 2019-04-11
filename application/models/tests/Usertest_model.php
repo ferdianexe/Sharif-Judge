@@ -15,6 +15,7 @@ class Usertest_model extends Test_model
     parent::__construct();
     $this->load->model("Notifications_model");
     $this->load->model("User_model");
+    $this->load->dbforge();
   }
 
   // ------------------------------------------------------------------------
@@ -180,7 +181,6 @@ class Usertest_model extends Test_model
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
     $this->emptyDB('users');
-
   }
 
   private function testing_method_have_user()
@@ -328,6 +328,12 @@ class Usertest_model extends Test_model
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
     //26 - User_model method validate_user
+    $test = $this->User_model->validate_user('dummy1', '');
+    $expected_result = true;
+    $test_name = "Testing validate_user function in User_model.php";
+    $notes = "input : blank password \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
+
     $test = $this->User_model->validate_user('dummy1', 'nothing');
     $expected_result = false;
     $test_name = "Testing validate_user function in User_model.php";
@@ -414,7 +420,7 @@ class Usertest_model extends Test_model
           'file_type'=>'java'
       );
 
-      $this->db->insert('shj_submissions',$this->shj_submissiondummy);
+    $this->db->insert('shj_submissions',$shj_submissionsdummy);
 
     $this->createUserDummy();
     //32 - User_model method delete_submissions
@@ -431,8 +437,18 @@ class Usertest_model extends Test_model
     $ntes = "input : valid id \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
+    $this->createUserDummy();
+    $test = $this->User_model->delete_submissions(100);
+    $expected_result = false;
+    $test_name = "Testing delete_submissions function in User_model.php";
+    $ntes = "input : valid id \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
+
     $this->emptyDB('users');
     $this->emptyDB('submissions');
+    $this->db-> trans_strict(FALSE);
+    $this->db->trans_complete();
+    $this->db-> trans_strict();
   }
 
   private function testing_method_delete_user()
@@ -453,12 +469,24 @@ class Usertest_model extends Test_model
     $notes = "input : valid userId \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
+
+    $this->createUserDummy();
+    $this->createUserDummy();
+    $test = $this->User_model->delete_user(100);
+    $expected_result = false;
+    $test_name = "Testing delete_user function in User_model.php";
+    $notes = "input : valid userId but has duplicate id \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    $this->unit->run($test, $expected_result, $test_name, $notes);
+
     $this->emptyDB('users');
   }
 
   private function testing_method_update_profile()
   {
     $this->createUserDummy();
+    $_POST['role'] = 'admin';
+    $_POST['password'] = 'dummy1'; 
+    $this->updateSettingForUpdateProfileTesting();
     // - User_model method update_profile
     $test = $this->User_model->update_profile(0);
     $expected_result = false;
@@ -474,23 +502,20 @@ class Usertest_model extends Test_model
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
     $this->emptyDB('users');
+    $_POST['role'] = null;
+    $_POST['password'] = null; 
+    $this->setBackUpdatedFileForUpdateProfileTesting();
   }
 
   private function testing_method_passchange_is_valid()
   {
     $this->createUserDummy();
+    $this->createUserDummy2();
     // - User_model method passchange_is_valid
     $test = $this->User_model->passchange_is_valid('a');
     $expected_result = 'Invalid password reset link.';
     $test_name = "Testing passchange_is_valid function in User_model.php";
     $notes = "input : not valid passChangeKey \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
-    $this->unit->run($test, $expected_result, $test_name, $notes);
-
-    // - User_model method passchange_is_valid
-    $test = $this->User_model->passchange_is_valid('abcde');
-    $expected_result = true;
-    $test_name = "Testing passchange_is_valid function in User_model.php";
-    $notes = "input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
     // - User_model method passchange_is_valid
@@ -501,7 +526,7 @@ class Usertest_model extends Test_model
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
     // - User_model method passchange_is_valid
-    $test = $this->User_model->passchange_is_valid('abcde');
+    $test = $this->User_model->passchange_is_valid('abcdef');
     $expected_result = true;
     $test_name = "Testing passchange_is_valid function in User_model.php";
     $notes = "input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
@@ -520,12 +545,29 @@ class Usertest_model extends Test_model
     $notes = "input : valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
 
+    // $this->load->library('session');
+    // session_start();
+    // $_SESSION['asdf']= 'asdf';
+    // $newdata = array(
+    //   'username'  => 'johndoe',
+    //   'email'     => 'johndoe@some-site.com',
+    //   'logged_in' => TRUE
+    // );
+    // $this->session->set_userdata($newdata);
+
+    // $test = $this->User_model->selected_assignment('dummy');
+    // $expected_result = null;
+    // $test_name = "Testing selected_asssignment function in User_model.php";
+    // $notes = "input : not valid \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
+    // $this->unit->run($test, $expected_result, $test_name, $notes);
+
     $this->emptyDB('users');
   }
 
   private function testing_method_send_password_reset_mail()
   {
     $this->createUserDummy();
+
     // - User_model method send_password_reset_mail
     $test = $this->User_model->send_password_reset_mail('asdfasdf');
     $expected_result = null;
@@ -539,6 +581,7 @@ class Usertest_model extends Test_model
     $test_name = "Testing send_password_reset_mail function in User_model.php";
     $notes = "input : not valid email \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
+
     $this->emptyDB('users');
   }
 
@@ -572,32 +615,64 @@ class Usertest_model extends Test_model
     $this->unit->run($test, $expected_result, $test_name, $notes);
   }
   // ------------------------------------------------------------------------
-
+  // CREATE DUMMY METHOD
   // ------------------------------------------------------------------------
-  var $shj_usersdummy = array(
-    array(
-        'id' => '100',
-        'username'=>'dummy1',
-        'password'=>'dummy1',
-        'display_name'=>'userdummy1',
-        'email'=>'dummy1@dummy.com',
+  private function createUserDummy(){
+    $shj_usersdummy = array(
+      array(
+          'id' => '100',
+          'username'=>'dummy1',
+          'password'=>'dummy1',
+          'display_name'=>'userdummy1',
+          'email'=>'dummy1@dummy.com',
+          'role'=>'admin',
+          'passchange_key'=>'abcde',
+          'passchange_time'=>'2010-03-28 14:47:03',
+          'first_login_time'=>'2018-02-14 09:04:03',
+          'last_login_time'=>'2018-02-14 09:04:03',
+          'selected_assignment'=>'1',
+          'dashboard_widget_positions'=>'dashboard1')
+      );
+    $this->db->insert('shj_users',$shj_usersdummy[0]);
+  }
+
+  private function createUserDummy2(){
+    
+    $CI =& get_instance();
+		$CI->load->model('settings_model');
+		$now = new DateTime('now', new DateTimeZone($CI->settings_model->get_setting('timezone')));
+    sscanf($now->format('j-n-Y G:i:s'), '%d-%d-%d %d:%d:%d', $day, $month, $year, $hour, $minute, $second);
+    $n = $year.'-'.$month.'-'.$day.' '.$hour.':'.($minute-5).':'.$second;
+
+    $shj_usersdummy = array(
+      array(
+        'id' => '200',
+        'username'=>'dummy2',
+        'password'=>'dummy2',
+        'display_name'=>'userdummy2',
+        'email'=>'dummy2@dummy.com',
         'role'=>'admin',
-        'passchange_key'=>'abcde',
-        'passchange_time'=>'2010-03-28 14:47:03',
+        'passchange_key'=>'abcdef',
+        'passchange_time'=> $n,
         'first_login_time'=>'2018-02-14 09:04:03',
         'last_login_time'=>'2018-02-14 09:04:03',
-        'selected_assignment'=>'1',
-        'dashboard_widget_positions'=>'dashboard1')
-    );
-
-  private function createUserDummy(){
-    $this->db->insert('shj_users',$this->shj_usersdummy[0]);
+        'selected_assignment'=>'2',
+        'dashboard_widget_positions'=>'dashboard2')
+      );
+    $this->db->insert('shj_users',$shj_usersdummy[0]);
   }
 
   private function emptyDB($tableName){
     $this->db->truncate($tableName);
-    
-}
+  }
+
+  private function updateSettingForUpdateProfileTesting(){
+    $this->db->simple_query("UPDATE shj_settings SET shj_value = 1 WHERE shj_key = 'lock_student_display_name'");
+  }
+
+  private function setBackUpdatedFileForUpdateProfileTesting(){
+    $this->db->simple_query("UPDATE shj_settings SET shj_value = 0 WHERE shj_key = 'lock_student_display_name'");
+  }
 
   
 }
