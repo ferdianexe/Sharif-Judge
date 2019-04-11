@@ -329,7 +329,7 @@ class Usertest_model extends Test_model
 
     //26 - User_model method validate_user
     $test = $this->User_model->validate_user('dummy1', '');
-    $expected_result = true;
+    $expected_result = false; // true
     $test_name = "Testing validate_user function in User_model.php";
     $notes = "input : blank password \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
