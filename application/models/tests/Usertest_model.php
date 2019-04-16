@@ -453,16 +453,19 @@ class Usertest_model extends Test_model
 
   private function testing_method_delete_user()
   {
-    $this->createUserDummy();
-
+    
     //34 - User_model method delete_user
     $test = $this->User_model->delete_user(99);
     $expected_result = false;
     $test_name = "Testing delete_user function in User_model.php";
     $notes = "input : not valid userId \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
-
+    
     //35 - User_model method delete_user
+    $this->db-> trans_strict(FALSE);
+    $this->db->trans_complete();
+    $this->db-> trans_strict();
+    $this->createUserDummy();
     $test = $this->User_model->delete_user(100);
     $expected_result = true;
     $test_name = "Testing delete_user function in User_model.php";
@@ -477,7 +480,6 @@ class Usertest_model extends Test_model
     $test_name = "Testing delete_user function in User_model.php";
     $notes = "input : valid userId but has duplicate id \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name, $notes);
-
     $this->emptyDB('users');
   }
 

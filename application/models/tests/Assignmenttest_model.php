@@ -136,7 +136,7 @@ class Assignmenttest_model extends Test_model
     $test = sizeof($test);
     $expected_result = 1;
     $test_name = "Test add_assignment function in Assignment_model.php";
-    $this->unit->run($test, $expected_result, $test_name);
+    $this->unit->run($test, $expected_result, $test_name,"'$expected_result' size of '$test'");
   }
 
   // ------------------------------------------------------------------------
