@@ -192,7 +192,7 @@ class Assignmenttest_model extends Test_model
     $test_name = "Testing new_assignment_id function in Assignment_model.php || input : - \nTime ~ Date: " . date('H:i:s ~ Y-m-d');
     $this->unit->run($test, $expected_result, $test_name);
     shell_exec("pwd");
-    shell_exec("cd ../{$this->settings_model->get_setting('assignments_root')} && rm -r assignment_4");
+    shell_exec("cd ..{$this->settings_model->get_setting('assignments_root')} && rm -r assignment_4");
   }
 
   private function addDummyAssignment()
