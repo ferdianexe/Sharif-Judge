@@ -10,5 +10,5 @@ before_script:
 services:
   - mysql
 script: 
-  - php index.php Migrations
-  - php index.php RunTest
+  - php index.php tests/Migrations
+  - php index.php tests/RunTest

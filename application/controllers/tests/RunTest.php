@@ -32,7 +32,7 @@ class RunTest extends CI_Controller {
 					$this->coverage->start('Sharif Unit Testing');
 			}	
 		foreach ($this->classes as $className) {
-			$this->load->model('tests/' . $className);
+			$this->load->model('../controllers/tests/' . $className);
 			$this->$className->runTest();
 		}
 	}
