@@ -39,6 +39,7 @@ class RunTest extends CI_Controller {
 	
 	public function index(){
 		$this->showResult();
+		
 	}
 
 	public function showResult() {
