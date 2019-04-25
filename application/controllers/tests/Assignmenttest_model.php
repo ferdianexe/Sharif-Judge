@@ -185,7 +185,7 @@ class Assignmenttest_model extends Test_model
   }
 
   private function testing_method_new_assignment_id(){
-    $shellString = "cd {$this->settings_model->get_setting('assignments_root')}&& mkdir assignment_4";
+    $shellString = "cd restricted/assignments && mkdir assignment_4";
     shell_exec($shellString);
     $test = $this->Assignment_model->new_assignment_id();
     $expected_result = 5;
