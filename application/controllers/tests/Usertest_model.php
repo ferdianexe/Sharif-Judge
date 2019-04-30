@@ -22,44 +22,46 @@ class Usertest_model extends Test_model
 
   public function test()
   {
-    // 1 - 10
-    $this->testing_method_add_user();
-    // 11 - 12
-    $this->testing_method_add_users();
-    // 13 - 15
-    $this->testing_method_have_user();
-    // 16 - 17
-    $this->testing_method_username_to_user_id();
-    // 18 - 20
-    $this->testing_method_user_id_to_username();
-    // 21 - 23
-    $this->testing_method_have_email();
-    // 24 - 27
-    $this->testing_method_validate_user();
-    // 28
-    $this->testing_method_get_names();
-    // 29 - 30 
-    $this->testing_method_get_user();
-    // 31
-    $this->testing_method_get_all_users();
-    // 32 - 33 
-    $this->testing_method_delete_submissions();
-    // 34 - 35
-    $this->testing_method_update_profile();
-    //
-    $this->testing_method_send_password_reset_mail();
-    //
-    $this->testing_method_update_login_time();
-    //
-    $this->testing_method_delete_user();
-    //
-    $this->testing_method_passchange_is_valid();
-    //
-    $this->testing_method_reset_password();
-    //
-    $this->testing_method_selected_assignment();
-    //
-    $this->clear();
+      if ($this->db->dbdriver != "postgre") {
+          // 1 - 10
+          $this->testing_method_add_user();
+          // 11 - 12
+          $this->testing_method_add_users();
+          // 13 - 15
+          $this->testing_method_have_user();
+          // 16 - 17
+          $this->testing_method_username_to_user_id();
+          // 18 - 20
+          $this->testing_method_user_id_to_username();
+          // 21 - 23
+          $this->testing_method_have_email();
+          // 24 - 27
+          $this->testing_method_validate_user();
+          // 28
+          $this->testing_method_get_names();
+          // 29 - 30
+          $this->testing_method_get_user();
+          // 31
+          $this->testing_method_get_all_users();
+          // 32 - 33
+          $this->testing_method_delete_submissions();
+          // 34 - 35
+          $this->testing_method_update_profile();
+          //
+          $this->testing_method_send_password_reset_mail();
+          //
+          $this->testing_method_update_login_time();
+          //
+          $this->testing_method_delete_user();
+          //
+          $this->testing_method_passchange_is_valid();
+          //
+          $this->testing_method_reset_password();
+          //
+          $this->testing_method_selected_assignment();
+          //
+          $this->clear();
+      }
   }
 
   private function clear()
