@@ -78,10 +78,10 @@ For running SharIF Judge, a Linux server with following requirements is needed:
   ```$writer->process($this->coverage, '`reports-dev`/code-coverage');```
   and
   ```file_put_contents('`reports-dev`/test_report.html', $this->unit->report());```
-  change ONLY the `reports-dev` to the folder that you made in the step 9.
-  12. if you wanna render the code coverage result set `const ENABLE_COVERAGE ` to `TRUE `
+  change ONLY the `reports-dev` to the folder that you made in the step 8.
+  12. If you want to render the code coverage result, set `const ENABLE_COVERAGE` value in `controllers/test/RunTest.php` to `TRUE `
   **[IMPORTANT]** xdebug needed.
-  13. To run the test in terminal, run this ```php index.php tests/Migrations```
+  13. To run the test in terminal, run the command ```php index.php tests/RunTest```.
   The test result will be printed in the terminal.
 
 
