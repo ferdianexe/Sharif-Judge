@@ -65,7 +65,7 @@ For running SharIF Judge, a Linux server with following requirements is needed:
   1. Clone the project first `git clone https://github.com/ferdianexe/Sharif-Judge.git`
   2. If you dont have MySQL install it first.
   3. Create new database in MySQL.
-  **[IMPORTANT]** For testing, you need to run the test in new database, otherwise **ALL**the data will be lost.
+  **[IMPORTANT]** For testing you need to run the test in new database, otherwise **ALL** data will be lost.
   4. Run ```composer install```, install composer to your system if it the system doesn't already have composer.
   5. Make sure the files `application/config/database.php` and `application/config/secrets.php` exist in the config folder. If it doesn't exist, make a copy of `application/config/database.example.php` or `application/config/secrets.example.php` and rename it.
   6. Set new database connection settings in `application/config/database.php`.
