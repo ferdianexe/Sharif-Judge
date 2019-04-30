@@ -64,21 +64,24 @@ For running SharIF Judge, a Linux server with following requirements is needed:
   
   1. Clone the project first `git clone https://github.com/ferdianexe/Sharif-Judge.git`
   2. If you dont have MySQL install it first.
-  3. Create new database in MySQL, **[IMPORTANT]** for testing, you need to run the test in new database, otherwise the data will be lost
-  4. Run <code>composer install</code>, install composer to your system if it the system doesn't already have composer.
+  3. Create new database in MySQL.
+  **[IMPORTANT]** For testing, you need to run the test in new database, otherwise **ALL**the data will be lost.
+  4. Run ```composer install```, install composer to your system if it the system doesn't already have composer.
   5. Make sure the files `application/config/database.php` and `application/config/secrets.php` exist in the config folder. If it doesn't exist, make a copy of `application/config/database.example.php` or `application/config/secrets.example.php` and rename it.
   6. Set new database connection settings in `application/config/database.php`.
   7. Make `application/cache/Twig` writable by php.
   8. Create a folder in root directory for example `reports-dev` it will be the place where the Test Reports and Code Coverage will be rendered  
   9. Create a new folder in directory `restricted/`. give the folder name `assignments`
-  10. Run the migrations first in terminal `php index.php tests/Migrations` **[IMPORTANT]** You dont need to to this again if there is database that used to do the testing
+  10. Run the migrations first in terminal `php index.php tests/Migrations`
+  **[IMPORTANT]** You dont need to to this again if there is database that used to do the testing
   11. in `controllers/test/RunTest.php`. check this line of code 
-  <code>$writer->process($this->coverage, '`reports-dev`/code-coverage');</code>
+  ```$writer->process($this->coverage, '`reports-dev`/code-coverage');```
   and
-  <code>file_put_contents('`reports-dev`/test_report.html', $this->unit->report());</code>
+  ```file_put_contents('`reports-dev`/test_report.html', $this->unit->report());```
   change ONLY the `reports-dev` to the folder that you made in the step 9.
-  12. if you wanna render the code coverage result set `const ENABLE_COVERAGE ` to `TRUE ` **[IMPORTANT]** xdebug needed.
-  13. To run the test in terminal, run this <code>php index.php tests/Migrations</code>
+  12. if you wanna render the code coverage result set `const ENABLE_COVERAGE ` to `TRUE `
+  **[IMPORTANT]** xdebug needed.
+  13. To run the test in terminal, run this ```php index.php tests/Migrations```
   The test result will be printed in the terminal.
 
 
