@@ -42,14 +42,25 @@ class RunTest extends CI_Controller {
 	}
 
 	public function showResult() {
-		$results = $this->unit->result();
-		if (self::ENABLE_COVERAGE) {
-			$this->coverage->stop();        
-			$writer = new \SebastianBergmann\CodeCoverage\Report\Html\Facade;
-			$writer->process($this->coverage, 'reports-dev/code-coverage');
-		}
-		//generate test report
-		file_put_contents('reports-dev/test_report.html', $this->unit->report());
+        if ($this->db->dbdriver != "postgre") { //if db is mysql
+            $results = $this->unit->result();
+            if (self::ENABLE_COVERAGE) {
+                $this->coverage->stop();
+                $writer = new \SebastianBergmann\CodeCoverage\Report\Html\Facade;
+                $writer->process($this->coverage, 'reports-dev/code-coverage');
+            }
+            //generate test report
+            file_put_contents('reports-dev/test_report.html', $this->unit->report());
+        }else{ //if db is postgres
+            $results = $this->unit->result();
+            if (self::ENABLE_COVERAGE) {
+                $this->coverage->stop();
+                $writer = new \SebastianBergmann\CodeCoverage\Report\Html\Facade;
+                $writer->process($this->coverage, 'reports/code-coverage-postgres');
+            }
+            //generate test report
+            file_put_contents('reports-dev/test_report_postgres.html', $this->unit->report());
+        }
 		$statistics = [
 				'Pass' => 0,
 				'Fail' => 0
