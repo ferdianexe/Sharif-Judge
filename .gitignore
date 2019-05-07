@@ -2,11 +2,8 @@
 
 .git
 .idea
-
 application/config/database.php
 application/config/secrets.php
-application/vendor/
-restricted/
 reports-dev/code-coverage/
 reports-dev/test_report.html
 
